@@ -1,4 +1,5 @@
 const faker = require('faker');
+const boom = require('@hapi/boom');
 
 class ProductsServices {
 
@@ -7,7 +8,7 @@ class ProductsServices {
     this.generate();
   }
 
-  generate () {
+  async generate () {
     const limit = 5;
     for (let i = 0; i < limit; i++) {
       this.products.push({
@@ -19,7 +20,7 @@ class ProductsServices {
     }
   }
 
-  create (data) {
+  async create (data) {
     const newProduct = {
       ...data,
       id: faker.datatype.uuid()
@@ -28,18 +29,22 @@ class ProductsServices {
     return newProduct;
   }
 
-  find () {
+  async find () {
     return this.products;
   }
 
-  findOne (id) {
-    return this.products.find(item => item.id === id);
+  async findOne (id) {
+    const product = this.products.find(item => item.id === id);
+    if (!product) {
+      throw boom.notFound('Product not found');
+    }
+    return product;
   }
 
-  update (id, changes, patch = false) {
+  async update (id, changes, patch = false) {
     const index = this.products.findIndex(item => item.id === id);
     if (index === -1) {
-      throw new Error('Product not found');
+      throw boom.notFound('Product not found');
     }
 
     if (patch) {
@@ -53,10 +58,10 @@ class ProductsServices {
     return this.products[index];
   }
 
-  delete (id) {
+  async delete (id) {
     const index = this.products.findIndex(item => item.id === id);
     if (index === -1) {
-      throw new Error('Product not found');
+      throw boom.notFound('Product not found');
     }
 
     this.products.splice(index, 1);

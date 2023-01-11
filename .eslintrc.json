@@ -13,6 +13,7 @@
   },
   "rules": {
     "no-console": "warn",
-    "semi": "error"
+    "semi": "error",
+    "no-unused-vars": ["error", {"argsIgnorePattern": "^_"}]
   }
 }
