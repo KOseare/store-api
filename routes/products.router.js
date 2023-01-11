@@ -23,19 +23,27 @@ router.post('/', (req, res) => {
 });
 
 router.patch('/:id', (req, res) => {
-  const {id} = req.params;
-  const body = req.body;
-  const product = service.update(id, body, true);
+  try {
+    const {id} = req.params;
+    const body = req.body;
+    const product = service.update(id, body, true);
 
-  res.status(200).json(product);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(404).json({message: error.message});
+  }
 });
 
 router.put('/:id', (req, res) => {
-  const {id} = req.params;
-  const body = req.body;
-  const product = service.update(id, body);
+  try {
+    const {id} = req.params;
+    const body = req.body;
+    const product = service.update(id, body);
 
-  res.status(200).json(product);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(404).json({message: error.message});
+  }
 });
 
 router.delete('/:id', (req, res) => {
