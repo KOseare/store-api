@@ -1,3 +1,5 @@
+const {models} = require('../libs/sequelize');
+
 class UserService {
   constructor() {}
 
@@ -6,7 +8,8 @@ class UserService {
   }
 
   async find() {
-    return [];
+    const rta = await models.User.findAll();
+    return rta;
   }
 
   async findOne(id) {
