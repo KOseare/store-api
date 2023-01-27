@@ -1,14 +1,78 @@
 'use strict';
 
-const {ProductSchema, PRODUCT_TABLE} = require('../models/products.model');
-const {CategorySchema, CATEGORY_TABLE} = require('../models/category.model');
+const {PRODUCT_TABLE} = require('../models/products.model');
+const {CATEGORY_TABLE} = require('../models/category.model');
+const {DataTypes} = require('sequelize');
 
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface) {
-    await queryInterface.createTable(CATEGORY_TABLE, CategorySchema);
-    await queryInterface.createTable(PRODUCT_TABLE, ProductSchema);
+    await queryInterface.createTable(CATEGORY_TABLE, {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        unique: true
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        field: 'created_at',
+        defaultValue: DataTypes.NOW
+      }
+    });
+    await queryInterface.createTable(PRODUCT_TABLE, {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        unique: true
+      },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      price: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      image: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        field: 'created_at',
+        defaultValue: DataTypes.NOW
+      },
+      categoryId: {
+        field: 'category_id',
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: CATEGORY_TABLE,
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
+      }
+    });
 
   },
 
