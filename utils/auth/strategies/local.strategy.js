@@ -13,7 +13,6 @@ const localStrategy = new Strategy(
   },
   async (email, password, done) => {
     try {
-      console.log({email, password});
       const user = await service.findByEmail(email);
       if (user) {
         const isMatch = await bcrypt.compare(password, user.password);
